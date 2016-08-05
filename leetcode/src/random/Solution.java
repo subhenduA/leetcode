@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class Solution {
 	
@@ -240,5 +241,65 @@ public class Solution {
         }
         return Arrays.copyOf(out, ptr);
     }
+	
+	
+	/**  155. Min Stack **/
+	public class MinStack {
+	    
+	    long min;
+	    Stack<Long> stack;
 
+	    /** initialize your data structure here. */
+	    public MinStack() {
+	        stack=new Stack<Long>();
+	    }
+	    
+	    public void push(int x) {
+	        if (stack.isEmpty()){
+	            stack.push(0L);
+	            min=x;
+	        }else{
+	            stack.push(x-min);//Could be negative if min value needs to change
+	            if (x<min) min=x;
+	        }
+	    }
+	    
+	    public void pop() {
+	        if (stack.isEmpty()) return;
+	        
+	        long pop=stack.pop();
+	        
+	        if (pop<0)  min=min-pop;//If negative, increase the min value
+	        
+	    }
+	    
+	    public int top() {
+	        long top=stack.peek();
+	        if (top>0){
+	            return (int)(top+min);
+	        }else{
+	           return (int)(min);
+	        }
+	    }
+	    
+	    public int getMin() {
+	         return (int)min;
+	    }
+	}
+
+	/**
+	 * Your MinStack object will be instantiated and called as such:
+	 * MinStack obj = new MinStack();
+	 * obj.push(x);
+	 * obj.pop();
+	 * int param_3 = obj.top();
+	 * int param_4 = obj.getMin();
+	 */
+
+	
+	/** 292. Nim Game **/
+	public boolean canWinNim(int n) {
+        if(n%4 > 0) return true;
+        return false;
+    }
 }
