@@ -25,6 +25,38 @@ public class Solution {
         return out;
     }
 	
+	/** String to Integer (atoi) **/
+	
+		public int myAtoi(String str) {
+	        int index = 0, sign = 1, total = 0;
+	    //1. Empty string
+	    if(str.length() == 0) return 0;
+	
+	    //2. Remove Spaces
+	    while(str.charAt(index) == ' ' && index < str.length())
+	        index ++;
+	
+	    //3. Handle signs
+	    if(str.charAt(index) == '+' || str.charAt(index) == '-'){
+	        sign = str.charAt(index) == '+' ? 1 : -1;
+	        index ++;
+	    }
+	    
+	    //4. Convert number and avoid overflow
+	    while(index < str.length()){
+	        int digit = str.charAt(index) - '0';
+	        if(digit < 0 || digit > 9) break;
+	
+	        //check if total will be overflow after 10 times and add digit
+	        if(Integer.MAX_VALUE/10 < total || Integer.MAX_VALUE/10 == total && Integer.MAX_VALUE %10 < digit)
+	            return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+	
+	        total = 10 * total + digit;
+	        index ++;
+	    }
+	    return total * sign;
+	}
+	
 	//15. 3Sum
 	public List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
@@ -78,6 +110,47 @@ public class Solution {
         return closest_so_far;
     }
 	
+	
+	
+	
+	/**  6. ZigZag Conversion **/
+	public String convert(String s, int numRows) {
+        // we know the formula that returns the char index list which belown 'i'th ZigZag row...
+        StringBuilder outString = new StringBuilder();
+        if(numRows == 1) return s;
+        for(int i = 1; i <= numRows; i++) {
+            int index = i, offset = 2*numRows-2;
+            // for border rows
+            if( i == 1 || i == numRows) {
+                while( index <= s.length()) {
+                    outString.append(s.charAt(index-1));
+                    index += offset; 
+                }
+            } else {
+                // for internal rows
+                int index2 = 2*numRows-i;
+                while( index <= s.length()) {
+                    outString.append(s.charAt(index-1));
+                    if(index2 <= s.length()) outString.append(s.charAt(index2-1));
+                    index += offset;
+                    index2 += offset;
+                }
+            }
+        }
+        return outString.toString();
+    }
+	
+	/** 27. Remove Element **/
+	public int removeElement(int[] nums, int val) {
+        Arrays.sort(nums);
+        int val_count = 0;
+        for(int i = 0; i < nums.length; i++) {
+            if(val_count > 0) nums[i-val_count] = nums[i];
+            if(nums[i] == val) val_count++;
+        }
+        return nums.length - val_count;
+    }
+	
 	/** 36. Valid Sudoku **/
 	public boolean isValidSudoku(char[][] board) {
         Map<Integer, Set> row_sets_map = new HashMap<Integer, Set>();
@@ -122,84 +195,44 @@ public class Solution {
         return true;
     }
 	
-	//5. Longest Palindromic Substring 
-	public String longestPalindrome(String s) {
-	        int slen = s.length();
-	        boolean[][] pal_table = new boolean[slen][slen];
-	        //initialize all pal. with length 1
-	        for(int i = 0; i < slen; i++) pal_table[i][i]= true;
-	        int max_pal_len = 1, pal_index = 0;
-	        //initialize all pal. table with length 2
-	        for(int i = 0; i < slen-1; i++) {
-	            if(s.charAt(i) == s.charAt(i+1))  {
-	                pal_table[i][i+1]=  true;
-	                max_pal_len = 2;
-	                pal_index = i;
-	            }
-	        }
-	        // build up solution for larger palindromes
-	        for( int plen = 3; plen <= slen; plen++) {
-	            if(plen - max_pal_len > 2) break; // avoid unnecessary computation
-	            for(int i = 0; i < slen - plen + 1; i++) {
-	                int j = i+plen-1;
-	                if(pal_table[i+1][j-1] && s.charAt(i) == s.charAt(j)) {
-	                    pal_table[i][j] = true;
-	                    max_pal_len = plen;
-	                    pal_index = i;
-	                }
-	            }
-	        }
-	        return s.substring(pal_index, pal_index+max_pal_len);
-	    }
 	
-	// 214. Shortest Palindrome
-	public String shortestPalindrome(String s) {
-        int len = s.length(), start, end , longest = s.isEmpty() ? 0 : 1;// initialize longest to 0 or 1
-        if(len <= 1) return s;
-		for (int begin = 0; begin <= len/2;) {
-			start = end = begin;
-			while (end < len - 1 && s.charAt(end + 1) == s.charAt(end)) ++end;
-			begin = end + 1;
-			while(end < len - 1 && start > 0 && s.charAt(end + 1) == s.charAt(start - 1)) {
-				++end;
-				--start;
-			}
-			// start == 0 means the palindromic substring is also prefix string.
-			if (start == 0 && longest < end - start + 1)
-				longest = end - start + 1;
-		}
-		
-        // build the prefix to add..
-        StringBuilder prefix = new StringBuilder((s.substring(longest)));
-        return new String(prefix.reverse().toString() + s);
-    }
-	
-	/**  6. ZigZag Conversion **/
-	public String convert(String s, int numRows) {
-        // we know the formula that returns the char index list which belown 'i'th ZigZag row...
-        StringBuilder outString = new StringBuilder();
-        if(numRows == 1) return s;
-        for(int i = 1; i <= numRows; i++) {
-            int index = i, offset = 2*numRows-2;
-            // for border rows
-            if( i == 1 || i == numRows) {
-                while( index <= s.length()) {
-                    outString.append(s.charAt(index-1));
-                    index += offset; 
-                }
-            } else {
-                // for internal rows
-                int index2 = 2*numRows-i;
-                while( index <= s.length()) {
-                    outString.append(s.charAt(index-1));
-                    if(index2 <= s.length()) outString.append(s.charAt(index2-1));
-                    index += offset;
-                    index2 += offset;
-                }
+	/** 165. Compare Version Numbers **/
+	public int compareVersion(String version1, String version2) {
+        //return 1;
+        int ptr1 = 0, ptr2 = 0;
+        int digit1, digit2;
+        while(ptr1 < version1.length() || ptr2 < version2.length()) {
+            
+            if(ptr1 >= version1.length()) digit1 = 0;
+            else {
+                int ptr1_next = version1.indexOf('.', ptr1);
+                if(ptr1_next < 0) ptr1_next = version1.length();
+                digit1 = Integer.parseInt(version1.substring(ptr1, ptr1_next));
+                //System.out.println(digit1);
+                ptr1 = ptr1_next+1;
             }
+            
+            if(ptr2 >= version2.length()) digit2 = 0;
+            else {
+                int ptr2_next = version2.indexOf('.', ptr2);
+                if(ptr2_next < 0) ptr2_next = version2.length();
+                digit2 = Integer.parseInt(version2.substring(ptr2, ptr2_next));
+                //System.out.println(digit2);
+                ptr2 = ptr2_next+1;
+            }
+            if( digit1 > digit2) return 1;
+            if( digit1 < digit2) return -1;
         }
-        return outString.toString();
+        return 0;
     }
+		
+	
+	/** 147. Insertion Sort List **/
+	
+	/** 242. Valid Anagram **/
+	
+	/** 274. H-Index **/
+	
 	
 	/** 290. Word Pattern  **/
 	public boolean wordPattern(String pattern, String str) {
@@ -297,9 +330,43 @@ public class Solution {
 	 */
 
 	
+	/** 258. Add Digits **/
+	
+    public int addDigits(int num) {
+        if(num%9 == 0) return num == 0 ? 0 : 9;
+        return num%9;
+    }
+	
+	/** 278. First Bad Version **/
+	
+	public int firstBadVersion(int n) {
+        long start = 1, stop = n; 
+        if(isBadVersion((int)start)) return (int)start;
+        while(start < stop) {
+            long mid =(long)Math.ceil((start + stop)/2);
+            if(isBadVersion((int)mid)) stop = mid;
+            else start = mid+1;
+        }
+        return (int)stop;
+    }
+	
+	public boolean isBadVersion(int n) {
+		return n >= 1702766719;
+		//return n >=40;
+	}
+	
 	/** 292. Nim Game **/
+    
 	public boolean canWinNim(int n) {
         if(n%4 > 0) return true;
         return false;
     }
+	
+	public static void main(String[] args) {
+		Solution s = new Solution();
+		System.out.println(Integer.MAX_VALUE);
+		System.out.println(s.firstBadVersion(2126753390));
+		//System.out.println(s.firstBadVersion(50));
+		System.out.println("here");
+	}
 }
