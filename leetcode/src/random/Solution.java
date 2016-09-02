@@ -115,7 +115,7 @@ public class Solution {
 	
 	/**  6. ZigZag Conversion **/
 	public String convert(String s, int numRows) {
-        // we know the formula that returns the char index list which belown 'i'th ZigZag row...
+        // we know the formula that returns the char index list which belong 'i'th ZigZag row...
         StringBuilder outString = new StringBuilder();
         if(numRows == 1) return s;
         for(int i = 1; i <= numRows; i++) {
@@ -254,6 +254,37 @@ public class Solution {
         return true;
     }
 	
+	/** 299. Bulls and Cows **/
+	public String getHint(String secret, String guess) {
+        int a = 0, b = 0;
+        Map<Character, Integer> secret_map = new HashMap<Character, Integer>();
+        Map<Character, Integer> guess_map = new HashMap<Character, Integer>();
+        for(int i = 0; i < secret.length(); i++) {
+            char s = secret.charAt(i);
+            char g = guess.charAt(i);
+            if (s == g) a++;
+            else {
+                // if s present in guess_map increment cow_count else insert s in secret_map
+                if (guess_map.get(s) == null || guess_map.get(s) == 0) {
+                    int ct = secret_map.containsKey(s) ? secret_map.get(s) + 1: 1;
+                    secret_map.put(s, ct);
+                } else {
+                    b++;
+                    guess_map.put(s, guess_map.get(s)-1);
+                }
+                // if g present in secret_map increment cow_count else insert s in guess_map
+                if (secret_map.get(g) == null || secret_map.get(g) == 0) {
+                    int ct = guess_map.containsKey(g) ? guess_map.get(g) + 1: 1;
+                    guess_map.put(g, ct);
+                } else {
+                    b++;
+                    secret_map.put(g, secret_map.get(g)-1);
+                }
+            }
+        }
+        return a + "A" + b + "B";
+    }
+	
 	/** 349. Intersection of Two Arrays **/
 	public int[] intersection(int[] nums1, int[] nums2) {
         //sort both the arrays 
@@ -362,11 +393,34 @@ public class Solution {
         return false;
     }
 	
+	
+	public List<Long> good_num(int n) {
+		List<Long> output = new ArrayList<Long>();
+		Map<Long, Integer> sol_set = new HashMap<Long, Integer>(); 
+		long max_bound = (long)Math.cbrt(n);
+		for(long i = 1; i < max_bound-1; i++) {
+			long i_cube = (long)Math.pow(i, 3);
+			for(long j = i+1; j <= max_bound; j++) {
+				long cur_result = i_cube + (long)Math.pow(j, 3);
+				Integer freq_count = sol_set.get(cur_result);
+				if (freq_count == null) sol_set.put(cur_result, 1);
+				else {
+					if(freq_count == 1) output.add(cur_result);
+					sol_set.put(cur_result, freq_count+1);
+				}
+			}
+		}
+		return output;
+	}
+	
 	public static void main(String[] args) {
 		Solution s = new Solution();
-		System.out.println(Integer.MAX_VALUE);
-		System.out.println(s.firstBadVersion(2126753390));
+		System.out.println(Math.cbrt(Long.MAX_VALUE));
+		System.out.println(Math.cbrt(Long.MAX_VALUE));
+		//System.out.println(s.firstBadVersion(2126753390));
 		//System.out.println(s.firstBadVersion(50));
+		//System.out.println(s.good_num(2147483647));
 		System.out.println("here");
+		
 	}
 }
