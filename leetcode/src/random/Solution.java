@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import search.Roman;
+
 public class Solution {
 	
 	//1. Two Sum
@@ -56,6 +58,39 @@ public class Solution {
 	    }
 	    return total * sign;
 	}
+		
+	/** 13. Roman to Integer **/
+		public int romanToInt(String a) {
+		    int running_sum = 0;
+		    int current_sum = 0;
+		    Map<Character, Integer> roman_char = new HashMap<Character, Integer>();
+		    roman_char.put('I', 1);
+		    roman_char.put('V', 5);
+		    roman_char.put('X', 10);
+		    roman_char.put('L', 50);
+		    roman_char.put('C', 100);
+		    roman_char.put('D', 500);
+		    roman_char.put('M', 1000);
+		    for(int i = 0; i < a.length(); i++) {
+		        if(i == 0) {
+		            current_sum = roman_char.get(a.charAt(i));
+		            continue;
+		        }
+		        
+		        if(a.charAt(i-1) == a.charAt(i)) {
+		            current_sum += roman_char.get(a.charAt(i));
+		        } else if(roman_char.get(a.charAt(i)) > roman_char.get(a.charAt(i-1))) {
+		            running_sum = running_sum + roman_char.get(a.charAt(i)) - current_sum;
+		            current_sum = 0;
+		        } else if(roman_char.get(a.charAt(i)) < roman_char.get(a.charAt(i-1))) {
+		            running_sum = running_sum + current_sum;
+		            current_sum = roman_char.get(a.charAt(i));
+		        }
+		        //System.out.println(running_sum);
+		    }
+		    return running_sum + current_sum;
+		}
+    
 	
 	//15. 3Sum
 	public List<List<Integer>> threeSum(int[] nums) {
@@ -413,10 +448,23 @@ public class Solution {
 		return output;
 	}
 	
+	public int reverseBits(int n) {
+        int r = 0;
+        for(int i = 0;i < 32; i++) {
+        	r <<= 1;
+            if((n & 1) == 1) r = r | 1;
+            n >>= 1;
+            System.out.println(r);
+        }
+        return r;
+    }
+	
 	public static void main(String[] args) {
 		Solution s = new Solution();
-		System.out.println(Math.cbrt(Long.MAX_VALUE));
-		System.out.println(Math.cbrt(Long.MAX_VALUE));
+		//System.out.println(Math.cbrt(Long.MAX_VALUE));
+		//System.out.println(Math.cbrt(Long.MAX_VALUE));
+		System.out.println(Integer.MAX_VALUE);
+		System.out.println(s.reverseBits(1));
 		//System.out.println(s.firstBadVersion(2126753390));
 		//System.out.println(s.firstBadVersion(50));
 		//System.out.println(s.good_num(2147483647));
