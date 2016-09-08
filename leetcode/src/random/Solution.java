@@ -341,6 +341,26 @@ public class Solution {
         return Arrays.copyOf(out, ptr);
     }
 	
+	/** 350. Intersection of Two Arrays II **/
+	public int[] intersect(int[] nums1, int[] nums2) {
+        //sort both the arrays 
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        
+        //traverse the sorted arrays to find the intersection and output it in a another array
+        int[] out = new int[Math.min(nums1.length, nums2.length)];
+        int ptr1 = 0, ptr2 = 0, ptr = 0;
+        while(ptr1 < nums1.length && ptr2 < nums2.length) {
+            if(nums1[ptr1] < nums2[ptr2]) ptr1++;
+            else if(nums1[ptr1] > nums2[ptr2]) ptr2++;
+            else {
+                out[ptr++] = nums1[ptr1];
+                ptr1++;
+                ptr2++;
+            }
+        }
+        return Arrays.copyOf(out, ptr);
+    }
 	
 	/**  155. Min Stack **/
 	public class MinStack {

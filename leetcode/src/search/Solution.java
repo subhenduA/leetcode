@@ -4,7 +4,64 @@ import java.util.Arrays;
 
 public class Solution {
 	
+	/** 190. Reverse Bits **/
+	public int reverseBits(int n) {
+        int r = 0;
+        for(int i = 0;i < 32; i++) {
+            r <<= 1;
+            if((n & 1) == 1) r = r | 1;
+            n >>= 1;
+            //System.out.println(r);
+        }
+        return r;
+    }
+	
+	/** 191. Number of 1 Bits **/
+	public int hammingWeight(int n) {
+        int count_bits = 0;
+        for(int i = 0; i < 32; i++) {           // until all bits are zero
+        if ((n & 1) == 1) count_bits++;
+            n >>= 1;              // shift bits, removing lower bit
+        }
+        return count_bits;
+    }
+	
+	
+	/** 231. Power of Two **/
+	public boolean isPowerOfTwo(int n) {
+        int count = 0;
+        while (n > 0) {           // until all bits are zero
+        if ((n & 1) == 1) count++;
+            n >>= 1;              // shift bits, removing lower bit
+        }
+        return count == 1;
+    }
+	
+	/** 326. Power of Three **/
+	public boolean isPowerOfThree(int n) {
+        if(n <= 0) return false;
+        while (n % 3 == 0) {
+            n /= 3;
+        }
+        return n == 1;
+    }
 
+	/** 342. Power of Four **/
+	public boolean isPowerOfFour(int n) {
+        int count_1_bit = 0;  //counts the number of bits
+        boolean odd_position = true;// power of 4 expects 1 in odd positions only
+        while (n > 0) {           // until all bits are zero
+        if ((n & 1) == 1) {
+            if(!odd_position) return false;
+            if(count_1_bit == 1) return false;
+            count_1_bit = 1;
+        }
+        n >>= 1;              // shift bits, removing lower bit
+        odd_position = !odd_position;
+        }
+        return count_1_bit == 1;
+    }
+	
 	/** 374. Guess Number Higher or Lower **/
 	public int guessNumber(int n) {
         long start = 1, stop = n;
