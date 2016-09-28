@@ -20,6 +20,33 @@ public class Solution {
 	        return pre;
 	    }
 		
+		/** 38. Count and Say **/
+		
+		public String countAndSay(int n) {
+	        String int_string = String.valueOf(1);
+	        for(int i = 1; i < n ; i++) {
+	            StringBuffer cur_string = new StringBuffer();
+	            int ptr = 1, ctr = 1;
+	            char c = int_string.charAt(0);
+	            while(ptr < int_string.length()) {
+	                if(int_string.charAt(ptr) == c) ctr++;
+	                else {
+	                    cur_string.append(ctr);
+	                    cur_string.append(c);
+	                    ctr = 1;
+	                    c = int_string.charAt(ptr);
+	                }
+	                ptr++;
+	            }
+	            cur_string.append(ctr);
+	            cur_string.append(c);
+	            int_string = cur_string.toString();
+	        }
+	        return int_string;
+	    }
+		
+		
+		
 		/** 67. Add Binary **/
 		public String addBinary(String a, String b) {
 	        StringBuilder output = new StringBuilder();
@@ -99,7 +126,4 @@ public class Solution {
 	        return true;
 	    }
 		
-		
-	
-	
 }

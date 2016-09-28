@@ -1,5 +1,7 @@
 package math;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 public class Solution {
@@ -46,6 +48,26 @@ public class Solution {
         }
         return sign*result;
     }
+	
+	/** 202. Happy Number  **/
+	
+	public boolean isHappy(int n) {
+        Set<Integer> visited_nums = new HashSet<Integer>();// keeps track of the numbers encounterdd in the while loop
+        visited_nums.add(n);//inserts the starting numbers
+        while(true) {
+            int new_n = 0; // calculate the square sum of the digits
+            while(n > 0) {
+                new_n += (n%10)*(n%10);
+                n /=10;
+            }
+            //System.out.println(new_n);
+            if(new_n == 1) return true; // got the happy number
+            if(visited_nums.contains(new_n)) return false; // encountered old number already visited , a loop returns false
+            visited_nums.add(new_n); 
+            n = new_n;
+        }
+    }
+	
 	
 	/** 204. Count Primes **/
 	

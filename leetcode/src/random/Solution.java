@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import search.Roman;
 
 public class Solution {
 	
@@ -263,6 +264,64 @@ public class Solution {
 		
 	
 	/** 147. Insertion Sort List **/
+	
+	/** 225. Implement Stack using Queues **/
+	class MyStack {
+	    private Queue<Object> queue = new LinkedList<Object>();
+
+	    public void push(int x) {
+	        queue.add(x);
+	        for (int i=1; i<queue.size(); i++)
+	            queue.add(queue.remove());
+	    }
+
+	    public void pop() {
+	        queue.remove();
+	    }
+
+	    public int top() {
+	        return (Integer) queue.peek();
+	    }
+
+	    public boolean empty() {
+	        return queue.isEmpty();
+	    }
+	}
+	
+	
+	/** 232. Implement Queue using Stacks **/
+	
+	class MyQueue {
+	    Stack<Integer> s = new Stack<Integer>();
+	    // Push element x to the back of queue.
+	    public void push(int x) {
+	        Stack<Integer> temp_s = new Stack<Integer>();
+	        while(!s.empty()) {
+	            temp_s.push(s.peek());
+	            s.pop();
+	        }
+	        s.push(x);
+	        while(!temp_s.empty()) {
+	            s.push(temp_s.peek());
+	            temp_s.pop();
+	        }
+	    }
+
+	    // Removes the element from in front of queue.
+	    public void pop() {
+	        s.pop();
+	    }
+
+	    // Get the front element.
+	    public int peek() {
+	        return s.peek();
+	    }
+
+	    // Return whether the queue is empty.
+	    public boolean empty() {
+	        return s.empty();
+	    }
+	}
 	
 	/** 242. Valid Anagram **/
 	
