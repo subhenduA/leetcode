@@ -20,6 +20,76 @@ public class Solution {
 	        return pre;
 	    }
 		
+		/** 28. Implement strStr()
+		 * Implement strStr().
+			Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+		 */
+		public int strStr(String haystack, String needle) {
+	        /*
+	        an integer, m ← 0 (the beginning of the current match in S)
+	        an integer, i ← 0 (the position of the current character in W)
+	        an array of integers, T (the table, computed elsewhere)
+	        */
+	        int m = 0, i = 0;
+	        // empty needle
+	        if(needle.isEmpty()) {
+	             return 0;
+	           
+	        }
+	        
+	        int[] kmp_table = build_kmp_table(needle);
+	        //System.out.println("kmp_table built");
+	        while ((m + i) < haystack.length()) {
+	            if (needle.charAt(i) == haystack.charAt(m + i)) {
+	                if (i == needle.length() - 1) return m;
+	                 i++;
+	            }
+	            else {
+	                if (kmp_table[i] > -1) {
+	                     m = m + i - kmp_table[i];
+	                     i = kmp_table[i];
+	                } else {
+	                     m++;
+	                     i = 0;
+	                }
+	            }
+	        }        
+	        //(if we reach here, we have searched all of S unsuccessfully)
+	        return -1;
+	    }
+	    
+	    public int[]  build_kmp_table(String needle) {
+	        int[] kmp_table = new int[needle.length()];        
+	        int pos = 2, i = 0;
+	         // handle trivial cases
+	         kmp_table[0] = -1;
+	         if(needle.length() <= 1) return kmp_table;
+	         kmp_table[1] = 0;
+	         
+	        while(pos < kmp_table.length) {
+	            //first case: the substring continues
+	            if (needle.charAt(pos-1) == needle.charAt(i)) {
+	                kmp_table[pos] = i + 1;
+	                i++; 
+	                pos++;
+	            }
+	            //second case: it doesn't, but we can fall back
+	            else if (i > 0)
+	                i = kmp_table[i];
+	            //third case: we have run out of candidates.  Note cnd = 0)
+	            else {
+	                kmp_table[pos] = 0; 
+	                pos++;
+	            }
+	        }
+	        //for(int j = 0; j < kmp_table.length; j++) System.out.print(kmp_table[j] + ":");
+	        return kmp_table;
+	    }
+	    
+	    
+		
+		
+		
 		/** 38. Count and Say **/
 		
 		public String countAndSay(int n) {
@@ -45,6 +115,25 @@ public class Solution {
 	        return int_string;
 	    }
 		
+		
+		/** 58. Length of Last Word
+		 * Given a string s consists of upper/lower-case alphabets and empty space characters ' ', 
+		 * return the length of last word in the string.
+		 * If the last word does not exist, return 0.
+			Note: A word is defined as a character sequence consists of non-space characters only.
+		
+			For example, 
+			Given s = "Hello World",
+			return 5.
+		 * 
+		 */
+		
+		
+		public int lengthOfLastWord(String s) {
+	        if(s.trim().length() == 0) return 0;
+	        int x = s.trim().lastIndexOf(' ');
+	        return x < 0 ? s.trim().length() : s.trim().length() -1 -x;
+	    }
 		
 		
 		/** 67. Add Binary **/
@@ -83,6 +172,23 @@ public class Solution {
 	        else return output.substring(output.indexOf("1"));
 	        
 	    }
+		
+		/** 151. Reverse Words in a String  **/
+		
+		public String reverseWords(String s) {
+	        String [] words = s.split(" ");
+	        StringBuilder sb = new StringBuilder();
+	        int end = words.length - 1;
+	        for(int i = 0; i<= end; i++){
+	            if(!words[i].isEmpty()) {
+	                sb.insert(0, words[i]);
+	                if(i < end) sb.insert(0, " ");
+	            }
+	        }
+	        return sb.toString();
+	    }
+		
+		
 		
 		/** 205. Isomorphic Strings **/
 		public boolean isIsomorphic(String s, String t) {

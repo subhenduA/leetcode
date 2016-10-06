@@ -95,5 +95,24 @@ public class Solution {
         return false;
     }
 	
+	
+	/** 404. Sum of Left Leaves 
+	 * Find the sum of all left leaves in a given binary tree.
+	 * **/
+	public int sumOfLeftLeaves(TreeNode root) {
+        if(root == null) return 0;
+        return call_dfs(root, 0, false);
+    }
+    
+    public int call_dfs(TreeNode node, int cur_sum, boolean is_left_child) {
+        //System.out.println(node.val + ":" + cur_sum + ":" + is_left_child);
+        if(node.left == null && node.right == null) 
+            return is_left_child ? cur_sum + node.val : cur_sum;
+        int new_sum = cur_sum;
+        if(node.left != null) new_sum = call_dfs(node.left, new_sum, true);
+        if(node.right != null) new_sum = call_dfs(node.right, new_sum, false);
+        return new_sum;
+    }
+	
 
 }
